@@ -1,0 +1,37 @@
+# No subir credenciales y configuraciones sensibles
+.env
+.env.*
+my.cnf
+
+# No subir configuraciones adicionales de bases de datos
+*.pem
+*.crt
+*.key
+*.bak
+*.sql
+
+# No subir archivos de caché de Python
+__pycache__/
+*.pyc
+*.pyo
+
+# No subir entornos virtuales de Python
+venv/
+.envrc
+
+# No subir archivos de dependencias de Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# No subir bases de datos locales
+mysql_data/
+
+# No subir archivos de logs y configuraciones de Docker
+*.log
+docker-compose.override.yml
+
+# No subir archivos de Streamlit
+.streamlit/
+
+# No subir archivos de imágenes y contenedores de Docker
+*.tar

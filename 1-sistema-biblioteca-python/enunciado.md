@@ -1,4 +1,3 @@
-
 ## Enunciado: Sistema de Gestión de Biblioteca (Python)
 
 Desarrolla un sistema que permita registrar libros, usuarios y préstamos. El sistema debe incluir lógica para disponibilidad, devoluciones y multas por retrasos. Usa programación orientada a objetos y funciones puras donde sea posible.

@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Definir la ruta del donde Streamlit va a correr primero (Esta es de prueba, despues puede cambiar conforme se vaya desarrollando el proyecto)
+    command: streamlit run main.py --server.port 8501 --server.address 0.0.0.0
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8501:8501"
+    depends_on:
+      - mysql_db
+    env_file:
+      - .env
+    networks:
+      - my_network
+
+  mysql_db:
+    image: mysql:latest
+    container_name: mysql_db_biblioteca
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "3306:3306"
+    volumes:
+      # Siempre dejar primero la ruta de "my.cnf" para que la conexión sea correcta y al final la ruta de "mysql_data" para reconexiones posteriores
+      - ./my.cnf:/etc/mysql/my.cnf
+      # --- Insertar aquí las rutas de los scripts que se van a ejecutar ---
+      - mysql_data:/var/lib/mysql
+    networks:
+      - my_network
+
+volumes:
+  mysql_data:
+
+networks:
+  my_network:
+    driver: bridge
