@@ -1,31 +1,33 @@
 version: '3.8'
 
 services:
+  # Servicio principal: la aplicación en Python (usando Streamlit)
   app:
     build:
-      context: .
-      dockerfile: Dockerfile
-    # Definir la ruta del donde Streamlit va a correr primero (Esta es de prueba, despues puede cambiar conforme se vaya desarrollando el proyecto)
-    command: streamlit run main.py --server.port 8501 --server.address 0.0.0.0
+      context: .  # Usar el Dockerfile ubicado en el directorio actual
+      dockerfile: Dockerfile  # Nombre explícito del Dockerfile a usar
+    # Ejecuta la app con Streamlit en el puerto 8501
+    command: streamlit run app/main.py --server.port 8501 --server.address 0.0.0.0
     volumes:
-      - .:/usr/src/app
+      - .:/usr/src/app  # Monta el código local dentro del contenedor
     ports:
-      - "8501:8501"
+      - "8501:8501"  # Expone el puerto 8501 de la app al host
     depends_on:
-      - mysql_db
+      - mysql_db  # Asegura que el contenedor de MySQL esté corriendo antes
     env_file:
-      - .env
+      - .env   # Carga variables de entorno (usuario, contraseña, etc.)
     networks:
-      - my_network
+      - my_network  # Red compartida con la base de datos
 
+  # Servicio de base de datos MySQL
   mysql_db:
-    image: mysql:latest
-    container_name: mysql_db_biblioteca
-    restart: always
+    image: mysql:latest  # Usa la última imagen oficial de MySQL
+    container_name: mysql_db_biblioteca  # Nombre fijo para el contenedor
+    restart: always  # Reinicia el contenedor automáticamente si falla o se reinicia el host
     env_file:
-      - .env
+      - .env  # Carga variables de entorno (usuario, contraseña, etc.)
     ports:
-      - "3306:3306"
+      - "3306:3306"  # Expone el puerto de MySQL para conexiones externas
     volumes:
       # Siempre dejar primero la ruta de "my.cnf" para que la conexión sea correcta y al final la ruta de "mysql_data" para reconexiones posteriores
       - ./my.cnf:/etc/mysql/my.cnf
@@ -34,9 +36,11 @@ services:
     networks:
       - my_network
 
+# Volumen para los datos de MySQL
 volumes:
   mysql_data:
 
+# Red tipo bridge para que los servicios se comuniquen entre sí
 networks:
   my_network:
     driver: bridge
